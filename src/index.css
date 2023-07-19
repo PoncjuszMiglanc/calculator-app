@@ -1,0 +1,29 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+button {
+  border: none;
+  border-radius: 15px;
+  font-size: inherit;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: antiquewhite;
+}
