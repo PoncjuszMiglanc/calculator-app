@@ -9,15 +9,11 @@ const ACTIONS = {
   ADD_OPERATOR: "add-operator",
 };
 
+//dodać jakieś formatowanie wyniku, zeby po kropce za duzo nie wyszlo liczb
 function App() {
-  //czy calculator > calculator__output > output__1 czy calculator > output > output__1 output__2
-  //ja ĆWICZĘ siłę woli, siedzenie przy kodzie, sam kod i rozwiązywanie problemów. Aplikacja jest efektem ubocznym.
-  //powoli zaczynam wierzyć, że zostanie developerem to dla mnie jedyna szansa, by stać się kimś, kto jest coś warty
-
   const evaluate = (x, y, z) => {
     switch (z) {
       case "÷": {
-        //ten parseInt obcina mi po przecinku wtf, prawdopodobnie to fixed albo chuj wie
         return (parseFloat(x) / parseFloat(y)).toString();
       }
       case "*": {
@@ -32,21 +28,21 @@ function App() {
     }
   };
 
-  // if (!state.currOperand) {
-  //   //że kropkę można dodać tylko raz
-  //   return { ...state, currOperand: action.payload };
-  // } else {
-  //   return { ...state, currOperand: state.currOperand + action.payload };
-  // }
-
   const reducer = (state, action) => {
     switch (action.type) {
       case ACTIONS.ADD_NUMBER: {
-        if (!state.currOperand) {
-          //że kropkę można dodać tylko raz
-          //że nie można dodać kropki i zera od początku
-          //jesli !state.curren && payload == 0 lub . to zwracam state, jesli mamy operand i isovverride to dajemy z isoverride, jesli tylko operand to dodajemy do operanda
+        if (!state.currOperand && action.payload === "0") {
+          return { ...state };
+        } else if (!state.currOperand && action.payload === ".") {
+          return { ...state };
+        } else if (!state.currOperand) {
           return { ...state, currOperand: action.payload };
+        } else if (state.currOperand.includes(".") && action.payload === ".") {
+          return { ...state };
+        } else if (state.isOverride && action.payload === ".") {
+          return { ...state };
+        } else if (state.isOverride && action.payload === "0") {
+          return { ...state };
         } else if (state.currOperand && state.isOverride) {
           return { ...state, currOperand: action.payload, isOverride: false };
         }
@@ -73,7 +69,6 @@ function App() {
         return { ...state };
       }
       case ACTIONS.EVALUATE: {
-        //nie działa dodawanie liczb z przecinkiem
         if (state.prevOperand && state.currOperand && state.operator) {
           return {
             ...state,
@@ -91,7 +86,6 @@ function App() {
       }
 
       case ACTIONS.ADD_OPERATOR: {
-        console.log("ADD_OPERATOR");
         if (state.currOperand) {
           return {
             ...state,
@@ -207,8 +201,6 @@ function App() {
         >
           =
         </button>
-        <button onClick={() => console.log(currOperand)}>OBECNY</button>
-        <button onClick={() => console.log(prevOperand)}>POPRZEDNI</button>
       </div>
     </>
   );
