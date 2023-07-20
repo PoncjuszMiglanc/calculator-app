@@ -9,25 +9,38 @@ const ACTIONS = {
   ADD_OPERATOR: "add-operator",
 };
 
-//dodać jakieś formatowanie wyniku, zeby po kropce za duzo nie wyszlo liczb
 function App() {
   const evaluate = (x, y, z) => {
+    const resultFormat = (res) => {
+      if (res === Math.trunc(res)) {
+        return res.toString();
+      } else {
+        return res.toFixed(2).toString();
+      }
+    };
+
+    const prev = parseFloat(x);
+    const curr = parseFloat(y);
     switch (z) {
       case "÷": {
-        return (parseFloat(x) / parseFloat(y)).toString();
+        const result = prev / curr;
+        return resultFormat(result);
       }
       case "*": {
-        return (parseFloat(x) * parseFloat(y)).toString();
+        const result = prev * curr;
+        return resultFormat(result);
       }
       case "+": {
-        return (parseFloat(x) + parseFloat(y)).toString();
+        const result = prev + curr;
+        return resultFormat(result);
       }
       case "-": {
-        return (parseFloat(x) - parseFloat(y)).toString();
+        const result = prev - curr;
+        return resultFormat(result);
       }
     }
   };
-
+  //chyba jednak trzeba wyjebać tego els ifa, co zera nie można na początku dawać, bo wtedy nie można np. usuwać liczb mniejszych od zera XD
   const reducer = (state, action) => {
     switch (action.type) {
       case ACTIONS.ADD_NUMBER: {
