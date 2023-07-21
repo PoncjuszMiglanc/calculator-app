@@ -40,21 +40,17 @@ function App() {
       }
     }
   };
-  //chyba jednak trzeba wyjebać tego els ifa, co zera nie można na początku dawać, bo wtedy nie można np. usuwać liczb mniejszych od zera XD
+
   const reducer = (state, action) => {
     switch (action.type) {
       case ACTIONS.ADD_NUMBER: {
-        if (!state.currOperand && action.payload === "0") {
+        if (state.currOperand === "0" && action.payload === "0") {
           return { ...state };
         } else if (!state.currOperand && action.payload === ".") {
           return { ...state };
         } else if (!state.currOperand) {
           return { ...state, currOperand: action.payload };
         } else if (state.currOperand.includes(".") && action.payload === ".") {
-          return { ...state };
-        } else if (state.isOverride && action.payload === ".") {
-          return { ...state };
-        } else if (state.isOverride && action.payload === "0") {
           return { ...state };
         } else if (state.currOperand && state.isOverride) {
           return { ...state, currOperand: action.payload, isOverride: false };
@@ -99,7 +95,15 @@ function App() {
       }
 
       case ACTIONS.ADD_OPERATOR: {
-        if (state.currOperand) {
+        if (state.currOperand && state.isOverride) {
+          return {
+            ...state,
+            currOperand: "",
+            prevOperand: state.currOperand,
+            operator: action.payload,
+            isOverride: false,
+          };
+        } else if (state.currOperand) {
           return {
             ...state,
             currOperand: "",
@@ -107,7 +111,7 @@ function App() {
             operator: action.payload,
           };
         }
-        return { ...state, operator: action.payload };
+        return { ...state };
       }
     }
   };
